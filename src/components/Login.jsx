@@ -1,10 +1,29 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
+import { validate } from "../utils/validate";
 import Header from "./Header";
 const Login = () => {
   const [signIn, setSignIn] = useState(true);
+  const [errorMsg, seterrorMsg] = useState(null);
+
+  const name = useRef(null);
+  const email = useRef(null);
+  const password = useRef(null);
+
+  const handleButtonClick = () => {
+
+  const nameValue = signIn ? "" : name.current.value;
+  const emailValue = email.current.value;
+  const passwordValue = password.current.value;
+
+  const message = validate(emailValue, passwordValue, nameValue);
+
+  seterrorMsg(message);
+};
+
   const togglepage = () => {
     setSignIn(!signIn);
   };
+
   return (
     <div>
       <Header />
@@ -14,27 +33,46 @@ const Login = () => {
           alt="logo"
         />
       </div>
-      <form className="absolute bg-black w-1/3 text-white p-4 my-36 mx-auto right-0 left-0 opacity-85 rounded-2xl">
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          handleButtonClick();
+        }}
+        className="absolute bg-black w-1/3 text-white p-4 my-36 mx-auto right-0 left-0 opacity-85 rounded-2xl"
+      >
         <h1 className="font-bold my-10 text-3xl">
           {signIn ? "Sign In" : "Sign Up"}
         </h1>
-        {!signIn && <input
-          type="text"
-          placeholder="Enter Name"
-          className="w-full my-2 p-3 bg-gray-700 text-xl rounded-lg border-1 border-white"
-        />}
+
+        {errorMsg && <p className="text-red-500 text-md my-2">{errorMsg}</p>}
+        {!signIn && (
+          <input
+            ref={name}
+            type="text"
+            placeholder="Enter Name"
+            className="w-full my-2 p-3 bg-gray-700 text-xl rounded-lg border-1 border-white"
+          />
+        )}
+
         <input
+          ref={email}
           type="text"
           placeholder="Email Address"
           className="w-full my-2 p-3 bg-gray-700 text-xl rounded-lg border-1 border-white"
         />
+
         <input
+          ref={password}
           type="password"
           placeholder="Password"
           className="w-full my-2 p-3 bg-gray-700 text-xl rounded-lg border-1 border-white"
         />
-        <button className="w-full bg-red-700 p-4 my-10 rounded-lg text-xl hover:bg-red-900">
-          {signIn? "Sign In" : "Sign Up"}
+
+        <button
+          type="submit"
+          className="w-full bg-red-700 p-4 my-10 rounded-lg text-xl hover:bg-red-900"
+        >
+          {signIn ? "Sign In" : "Sign Up"}
         </button>
         <p className="cursor-pointer py-2" onClick={togglepage}>
           {signIn
