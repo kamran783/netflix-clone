@@ -1,0 +1,49 @@
+import { useState } from "react";
+import Header from "./Header";
+const Login = () => {
+  const [signIn, setSignIn] = useState(true);
+  const togglepage = () => {
+    setSignIn(!signIn);
+  };
+  return (
+    <div>
+      <Header />
+      <div className="absolute">
+        <img
+          src="https://assets.nflxext.com/ffe/siteui/vlv3/37372b0c-16ef-4614-9c66-f0464ffe4136/web/IN-en-20260216-TRIFECTA-perspective_74aa38a5-f527-417e-a604-a039567a350b_large.jpg"
+          alt="logo"
+        />
+      </div>
+      <form className="absolute bg-black w-1/3 text-white p-4 my-36 mx-auto right-0 left-0 opacity-85 rounded-2xl">
+        <h1 className="font-bold my-10 text-3xl">
+          {signIn ? "Sign In" : "Sign Up"}
+        </h1>
+        {!signIn && <input
+          type="text"
+          placeholder="Enter Name"
+          className="w-full my-2 p-3 bg-gray-700 text-xl rounded-lg border-1 border-white"
+        />}
+        <input
+          type="text"
+          placeholder="Email Address"
+          className="w-full my-2 p-3 bg-gray-700 text-xl rounded-lg border-1 border-white"
+        />
+        <input
+          type="password"
+          placeholder="Password"
+          className="w-full my-2 p-3 bg-gray-700 text-xl rounded-lg border-1 border-white"
+        />
+        <button className="w-full bg-red-700 p-4 my-10 rounded-lg text-xl hover:bg-red-900">
+          {signIn? "Sign In" : "Sign Up"}
+        </button>
+        <p className="cursor-pointer py-2" onClick={togglepage}>
+          {signIn
+            ? "New to Netflix.. Sign Up Now"
+            : "Already a user Sign In..."}
+        </p>
+      </form>
+    </div>
+  );
+};
+
+export default Login;
