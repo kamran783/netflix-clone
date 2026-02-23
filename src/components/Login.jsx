@@ -1,7 +1,10 @@
 import { useState, useRef } from "react";
 import { validate } from "../utils/validate";
 import Header from "./Header";
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
+import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+} from "firebase/auth";
 import { auth } from "../utils/firebase";
 
 const Login = () => {
@@ -12,39 +15,36 @@ const Login = () => {
   const password = useRef(null);
 
   const handleButtonClick = () => {
-    console.log("button clicked");
-  const emailValue = email.current.value;
-  const passwordValue = password.current.value;
+    const emailValue = email.current.value;
+    const passwordValue = password.current.value;
 
-  const message = validate(emailValue, passwordValue);
-  seterrorMsg(message);
+    const message = validate(emailValue, passwordValue);
+    seterrorMsg(message);
 
-  if (message) return;
+    if (message) return;
 
-  //  Create auth ONCE (for both sign in & sign up)
-  
+    //  Create auth ONCE (for both sign in & sign up)
 
-  if (!signIn) {
-    // SIGN UP
-    createUserWithEmailAndPassword(auth, emailValue, passwordValue)
-      .then((userCredential) => {
-        console.log("Signed Up User:", userCredential.user);
-      })
-      .catch((error) => {
-        seterrorMsg(error.code + " " + error.message);
-      });
-
-  } else {
-    // SIGN IN
-    signInWithEmailAndPassword(auth, emailValue, passwordValue)
-      .then((userCredential) => {
-        console.log("Signed In User:", userCredential.user);
-      })
-      .catch((error) => {
-        seterrorMsg(error.code + " " + error.message);
-      });
-  }
-};
+    if (!signIn) {
+      // SIGN UP
+      createUserWithEmailAndPassword(auth, emailValue, passwordValue)
+        .then((userCredential) => {
+          console.log("Signed Up User:", userCredential.user);
+        })
+        .catch((error) => {
+          seterrorMsg(error.code + " " + error.message);
+        });
+    } else {
+      // SIGN IN
+      signInWithEmailAndPassword(auth, emailValue, passwordValue)
+        .then((userCredential) => {
+          console.log("Signed In User:", userCredential.user);
+        })
+        .catch((error) => {
+          seterrorMsg(error.code + " " + error.message);
+        });
+    }
+  };
 
   const togglepage = () => {
     setSignIn(!signIn);
@@ -60,53 +60,55 @@ const Login = () => {
         />
       </div>
       <form
-  onSubmit={(e) => {
-    e.preventDefault();
-    handleButtonClick();
-  }}
-  className="absolute bg-black w-full md:w-1/3 text-white p-4 my-36 mx-auto right-0 left-0 opacity-85 rounded-2xl"
->
-  <h1 className="font-bold my-10 text-3xl">
-    {signIn ? "Sign In" : "Sign Up"}
-  </h1>
+        onSubmit={(e) => {
+          e.preventDefault();
+          handleButtonClick();
+        }}
+        className="absolute bg-black w-full md:w-1/3 text-white p-4 my-36 mx-auto right-0 left-0 opacity-85 rounded-2xl"
+      >
+        <h1 className="font-bold my-10 text-3xl">
+          {signIn ? "Sign In" : "Sign Up"}
+        </h1>
 
-  {errorMsg && <p className="text-red-500 text-md my-2">{errorMsg}</p>}
+        {!signIn && (
+          <input
+            type="text"
+            placeholder="Enter Name"
+            className="w-full my-2 p-3 bg-gray-700 text-xl rounded-lg border-1 border-white"
+          />
+        )}
 
-  {!signIn && (
-    <input
-      type="text"
-      placeholder="Enter Name"
-      className="w-full my-2 p-3 bg-gray-700 text-xl rounded-lg border-1 border-white"
-    />
-  )}
+        <input
+          ref={email}
+          type="text"
+          placeholder="Email Address"
+          className="w-full my-2 p-3 bg-gray-700 text-xl rounded-lg border-1 border-white"
+        />
 
-  <input
-    ref={email}
-    type="text"
-    placeholder="Email Address"
-    className="w-full my-2 p-3 bg-gray-700 text-xl rounded-lg border-1 border-white"
-  />
+        <input
+          ref={password}
+          type="password"
+          placeholder="Password"
+          className="w-full my-2 p-3 bg-gray-700 text-xl rounded-lg border-1 border-white"
+        />
 
-  <input
-    ref={password}
-    type="password"
-    placeholder="Password"
-    className="w-full my-2 p-3 bg-gray-700 text-xl rounded-lg border-1 border-white"
-  />
+        {/* displaying the error message */}
 
-  <button
-    type="submit"
-    className="w-full bg-red-700 p-4 my-10 rounded-lg text-xl hover:bg-red-900"
-  >
-    {signIn ? "Sign In" : "Sign Up"}
-  </button>
+        {errorMsg && <p className="text-red-500 text-md my-2">{errorMsg}</p>}
 
-  <p className="cursor-pointer py-2" onClick={togglepage}>
-    {signIn
-      ? "New to Netflix.. Sign Up Now"
-      : "Already a user Sign In..."}
-  </p>
-</form>
+        <button
+          type="submit"
+          className="w-full bg-red-700 p-4 my-10 rounded-lg text-xl hover:bg-red-900"
+        >
+          {signIn ? "Sign In" : "Sign Up"}
+        </button>
+
+        <p className="cursor-pointer py-2" onClick={togglepage}>
+          {signIn
+            ? "New to Netflix.. Sign Up Now"
+            : "Already a user Sign In..."}
+        </p>
+      </form>
     </div>
   );
 };
