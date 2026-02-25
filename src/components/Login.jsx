@@ -1,7 +1,6 @@
 import { useState, useRef } from "react";
 import { validate } from "../utils/validate";
 import Header from "./Header";
-import { useNavigate } from "react-router-dom";
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
@@ -16,7 +15,7 @@ const Login = () => {
   const [signIn, setSignIn] = useState(true);
   const [errorMsg, setErrorMsg] = useState(null);
 
-  const navigate = useNavigate();
+  
   const dispatch = useDispatch();
 
   const name = useRef(null);
@@ -58,7 +57,7 @@ const Login = () => {
               photoUrl: photoURL,
             }),
           );
-          navigate("/browse");
+          
         })
         .catch((error) => {
           setErrorMsg(error.code + " - " + error.message);
@@ -71,7 +70,7 @@ const Login = () => {
     else {
       signInWithEmailAndPassword(auth, emailValue, passwordValue)
         .then(() => {
-          navigate("/browse");
+         
         })
         .catch((error) => {
           setErrorMsg(error.code + " - " + error.message);
